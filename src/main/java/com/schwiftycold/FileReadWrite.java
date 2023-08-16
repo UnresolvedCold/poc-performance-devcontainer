@@ -1,5 +1,6 @@
 package com.schwiftycold;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -35,9 +36,11 @@ public class FileReadWrite {
   };
 
   public static void main(String[] args) {
+    deleteFilesStartingWithPrefix(".", "randomFile");
     writeRandomFiles();
     readRandomly();
     printRandomStrings();
+    deleteFilesStartingWithPrefix(".", "randomFile");
 
     System.out.println(metric.toString());
   }
@@ -141,6 +144,25 @@ public class FileReadWrite {
     }
 
     return sb.toString();
+  }
+
+  public static void deleteFilesStartingWithPrefix(String directoryPath, String prefix) {
+    File directory = new File(directoryPath);
+
+    if (directory.isDirectory()) {
+      File[] files = directory.listFiles();
+      if (files != null) {
+        for (File file : files) {
+          if (file.isFile() && file.getName().startsWith(prefix)) {
+            if (file.delete()) {
+              System.out.println("Deleted: " + file.getName());
+            } else {
+              System.out.println("Failed to delete: " + file.getName());
+            }
+          }
+        }
+      }
+    }
   }
 
 }
